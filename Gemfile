@@ -1,8 +1,8 @@
 source 'http://rubygems.org'
 
-gem 'sqlite3'
+gem 'pg'
 gem 'data_mapper'
-gem 'dm-sqlite-adapter'
+gem 'dm-postgres-adapter'
 gem 'sinatra'
 gem 'thin'
 gem 'tux'
