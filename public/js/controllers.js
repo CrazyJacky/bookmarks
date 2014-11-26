@@ -96,8 +96,8 @@ bookmarkControllers.controller("LoginCtrl", ["$scope", "$location", "$window", "
     };
 }]);
 
-bookmarkControllers.controller("HomeCtrl", ["$scope", "$location", "AuthService", "auth",function ($scope, $location, AuthService, auth) {
-    $scope.userInfo = auth;
+bookmarkControllers.controller("HomeCtrl", ["$scope", "$location", "AuthService",function ($scope, $location, AuthService) {
+
 
     $scope.logout = function () {
 

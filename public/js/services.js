@@ -13,12 +13,14 @@ bookmarkServices.factory("AuthService", ["$http","$q","$window",function ($http,
 
         $http.post("/login", { userName: userName, password: password })
             .then(function (result) {
-                userInfo = result.data;
-                console.log(result)
-                $window.sessionStorage["userInfo"] = userInfo;
+                userInfo = {
+                    accessToken: result.data.access_token,
+                    userName: result.data.userName
+                };
+                $window.sessionStorage["userInfo"] = JSON.stringify(result.data);
                 deferred.resolve(userInfo);
                 console.log($window.sessionStorage["userInfo"]);
-                console.log(userInfo);
+                console.log(result);
             }, function (error) {
                 deferred.reject(error);
             });
@@ -33,7 +35,7 @@ bookmarkServices.factory("AuthService", ["$http","$q","$window",function ($http,
             method: "POST",
             url: "/logout",
             headers: {
-                "access_token": userInfo.accessToken
+                "access_token": userInfo.access_token
             }
         }).then(function (result) {
             userInfo = null;
@@ -51,9 +53,8 @@ bookmarkServices.factory("AuthService", ["$http","$q","$window",function ($http,
     }
 
     function init() {
-
-        if (userInfo) {
-            userInfo = JSON.parse(userInfo);
+        if ($window.sessionStorage["userInfo"]) {
+            userInfo = JSON.parse($window.sessionStorage["userInfo"]);
         }
     }
     init();

@@ -9,20 +9,11 @@ var bookmarkApp = angular.module('bookmarkApp', [
 bookmarkApp.config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.
-            when("/", {
-                templateUrl: "views/home.html",
-                controller: "HomeCtrl",
-                resolve: {
-                    auth: function ($q, AuthService) {
-                        var userInfo = AuthService.getUserInfo();
-                        if (userInfo) {
-                            return $q.when(userInfo);
-                        } else {
-                            return $q.reject({ authenticated: false });
-                        }
-                    }
-                }
-            }).when("/login", {
+            when("/login", {
+                templateUrl: "views/partials/login.html",
+                controller: "LoginCtrl"
+            }).
+            when("/logout", {
                 templateUrl: "views/partials/login.html",
                 controller: "LoginCtrl"
             }).
@@ -32,6 +23,7 @@ bookmarkApp.config(['$routeProvider',
                 resolve: {
                     auth: function ($q, AuthService) {
                         var userInfo = AuthService.getUserInfo();
+                        console.log(userInfo);
                         if (userInfo) {
                             return $q.when(userInfo);
                         } else {

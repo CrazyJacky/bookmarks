@@ -125,23 +125,14 @@ class Server < Sinatra::Base
   end
 
 
-  Array tokens = [];
-
   post '/login' do
     data = JSON.parse(request.body.read)
     user = data.slice "userName", "password"
 
-    puts user.to_json
-
-    puts user["userName"]
-    puts user["password"]
-
-    if user["userName"].eql?("jacky") && user["password"].eql?("julia")
+    if user["userName"].eql?("jacky") && user["password"].eql?("lovejulia")
       token = SecureRandom.urlsafe_base64
-      tokens.push(token)
-      #tokens.push(token)
       ret = {"access_token" => token, "userName" => user["userName"]}
-      puts ret
+
       [200, ret.to_json]
     else
       [401,"Invalid username/password!"]
@@ -150,7 +141,8 @@ class Server < Sinatra::Base
   end
 
   post '/logout' do
-    [200]
+    ret = {"access_token" => "", "userName" => ""}
+    [200, ret.to_json]
   end
 
 =begin
