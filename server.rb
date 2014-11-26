@@ -1,0 +1,196 @@
+require 'sinatra'
+require 'json'
+
+
+class Server < Sinatra::Base
+
+
+
+  require_relative 'model/init'
+
+  before do
+    headers 'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => ['OPTIONS', 'GET', 'POST'],
+            'Access-Control-Allow-Headers' => 'Content-Type'
+  end
+
+  enable :sessions
+
+  helpers do
+    def add_tags(bookmark,data)
+
+      labels = (data["tagList"] || "").split(",").map(&:strip)
+      #puts labels
+      # more code to come
+
+      existing_labels = []
+      #puts "Existing Lables: #{existing_labels}"
+      bookmark.taggings.each do |tagging|
+        puts "tagging: #{tagging}"
+        if labels.include? tagging.tag.label
+          existing_labels.push tagging.tag.label
+        else
+          tagging.destroy
+        end
+      end
+
+      #puts "Existing Lables 2: #{existing_labels}"
+
+      (labels - existing_labels).each do |label|
+
+        #puts label
+        tag = {:label => label}
+        existing = Tag.first tag
+        if !existing
+          existing = Tag.create! tag
+        end
+        Tagging.create! :tag => existing, :bookmark => bookmark
+      end
+    end
+
+    def authorize!
+      redirect(to('/login')) unless session[:user_id]
+    end
+
+  end
+
+  get '/' do
+    #authorize!
+    @bookmarks = Bookmark.all
+    @tags = Tag.all
+    @taggings = Tagging.all
+    File.read(File.join('public/views', 'index.html'))
+  end
+
+  set :protection => false
+
+  with_tagList = {:methods => [:tagList]}
+
+
+  get '/bookmarks' do
+    @bookmarks = Bookmark.all
+    @bookmarks.to_json with_tagList
+  end
+
+  get '/bookmarks/:id' do
+    @bookmark = Bookmark.get(params[:id])
+    @bookmark.to_json with_tagList
+  end
+
+  put '/bookmarks/edit/:id' do
+    # ...
+    data = JSON.parse(request.body.read)
+    input = data.slice "url", "title"
+    if !input["url"].match(/^http/)
+      input["url"] = "http://" + input["url"]
+    end
+    @bookmark = Bookmark.get(params[:id])
+    if @bookmark.update! input
+      add_tags(@bookmark,data)
+      204 # No Content
+    else
+      400 # Bad Request
+    end
+  end
+
+  delete '/bookmarks/:id' do
+    # ...
+    @bookmark = Bookmark.get(params[:id])
+    if @bookmark.destroy
+      200 # OK
+    else
+      500 # Internal Server Error
+    end
+  end
+
+
+  post "/bookmarks" do
+    data = JSON.parse(request.body.read)
+    input = data.slice "url", "title"
+    if !input["url"].match(/^http/)
+      input["url"] = "http://" + input["url"]
+    end
+
+    bookmark = Bookmark.new input
+
+    if  bookmark.save!
+      # bookmark.save
+      add_tags(bookmark,data)
+
+      # Created
+      [201, "/bookmarks/#{bookmark['id']}"]
+    else
+      400 # Bad Request
+    end
+  end
+
+
+  Array tokens = [];
+
+  post '/login' do
+    data = JSON.parse(request.body.read)
+    user = data.slice "userName", "password"
+
+    puts user.to_json
+
+    puts user["userName"]
+    puts user["password"]
+
+    if user["userName"].eql?("jacky") && user["password"].eql?("julia")
+      token = SecureRandom.urlsafe_base64
+      tokens.push(token)
+      #tokens.push(token)
+      ret = {"access_token" => token, "userName" => user["userName"]}
+      puts ret
+      [200, ret.to_json]
+    else
+      [401,"Invalid username/password!"]
+    end
+
+  end
+
+  post '/logout' do
+    [200]
+  end
+
+=begin
+  app.post('/api/logout', requiresAuthentication, function(request, response) {
+                          var token= request.headers.access_token;
+                          removeFromTokens(token);
+                          response.send(200);
+                        });
+=end
+
+
+=begin
+  post('/api/login', function(request, response) {
+                     var userName = request.body.userName;
+                     var password = request.body.password;
+
+                     if (userName === "Ravi" && password === "kiran") {
+                         var expires = new Date();
+                     expires.setDate((new Date()).getDate() + 5);
+                     var token = jwt.encode({
+                                                userName: userName,
+                                                expires: expires
+                                            }, app.get('jwtTokenSecret'));
+
+                     tokens.push(token);
+
+                     response.send(200, { access_token: token, userName: userName });
+                     } else {
+                         response.send(401, "Invalid credentials");
+                     }
+=end
+
+
+
+
+end
+
+class Hash
+  def slice(*whitelist)
+    whitelist.inject({}) { |result, key| result.merge(key => self[key]) }
+  end
+end
+

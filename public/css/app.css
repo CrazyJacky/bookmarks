@@ -1,0 +1,142 @@
+body {
+    background-color: rgba(113,178,206,0.5);
+    /*background-image: url('../img/bigwave.jpg');*/
+    font-family: 'Source Sans Pro', sans-serif;
+}
+html, body {
+    margin: 0;
+    padding: 0;
+}
+h1, h3 {
+    font-weight: 700;
+}
+a {
+    /*color: #3399FF;*/
+}
+header > * {
+    display: inline-block;
+    margin-left: 15px;
+}
+header a {
+    font-size: 18px;
+}
+.header {
+    background-color: rgba(255,255,255,0.5);
+}
+.large-4.columns.center {
+    margin: 0 auto;
+    /*display: inline-block;*/
+}
+.center {
+    /*margin-left: 18%;*/
+}
+.author-in-quote {
+    padding-top: 10px;
+    text-align: right;
+}
+.quote-in-quote {
+    font-size: 16px;
+}
+.author-in-authors {
+    background-color: rgba(255,255,255,0.5);
+    padding: 2px;
+}
+.author-in-authors:hover {
+    text-decoration: none;
+}
+.layer {
+    background-color: rgba(80,200,120,0.5);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1;
+}
+li {
+    list-style-type: none;
+}
+.ng-scope {
+    padding: 10px;
+}
+.line {
+    background-color: rgba(25,25,25,0.2);
+    height: 1px;
+    padding: 0px;
+}
+.quote {
+    background-color: white;
+    padding: 15px;
+    margin: 10px;
+    display: inline-block;
+    max-width: 300px;
+    position: relative;
+    z-index: 0;
+    border-radius: 10px;
+    text-decoration: none;
+}
+.quote:hover {
+    background-color: white;
+    background-color: rgba(0,0,0,0.1);
+}
+.featured-quote {
+    background-color: white;
+    padding: 15px;
+    margin: 10px;
+    width: 50%;
+    margin: 20px auto;
+    border-radius: 10px;
+}
+.featured-quote p:first-child {
+    font-size: 19px;
+}
+.featured-quote p:nth-child(2) {
+    text-align: right;
+}
+.add-margin {
+    margin-left: 15px;
+}
+.form-link {
+    float: right;
+}
+textarea {
+    width: 100%;
+}
+.new-quote-form.ng-scope, .delete-form.ng-scope {
+    display: hidden;
+    background-color: white;
+    padding: 40px;
+    position: absolute;
+    z-index: 1000;
+    width: 55%;
+    margin-left: 17%;
+    top: 50px;
+}
+h3 {
+    margin: 0px 0px 10px 0px;
+    text-align: center;
+}
+.form-wrapper {
+    margin: 0 auto;
+}
+.center-edit-delete {
+    width: 250px;
+    margin: 0 auto;
+}
+.center-edit-delete > * {
+    display: inline-block;
+    width: 100px;
+    height: 37px;
+    margin: 0 auto;
+}
+.can {
+    /*margin-top: 20px;*/
+}
+.title-in-bookmark {
+    padding-top: 10px;
+    text-align: right;
+}
+.bookmark-in-bookmark {
+    font-size: 16px;
+}

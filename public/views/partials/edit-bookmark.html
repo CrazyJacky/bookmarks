@@ -1,0 +1,16 @@
+<form>
+    <input type="hidden" name="_method" value="put">
+    <!-- <fieldset> -->
+    <legend>Update this bookmark</legend>
+    <label for="bookmark">Bookmark:</label>
+    <textarea ng-model="bookmark.url" rows="4" cols="70">{{bookmark.url}}</textarea>
+
+    <label for="bookmark">Title:</label>
+    <input ng-model="bookmark.title" type="text" value="{{bookmark.title}}">
+    <label for="bookmark">Tags</label>
+    <input ng-model="bookmark.tagList" type="text" value="{{bookmark.tags}}">
+    <!-- </fieldset> -->
+
+    <input type="submit" value="Update" class="add-margin form-button" ng-click="updateQuote(bookmark)">
+    <a href="/#" class="form-link">Cancel</a>
+</form>

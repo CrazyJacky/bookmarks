@@ -1,0 +1,76 @@
+<!-- <h3>Bookmarks</h3> -->
+
+<div class="layer ng-hide" ng-click="hideForm()">
+</div>
+
+<div class="row">
+    <div class="small-8">
+        <div class="row">
+            <div class="small-3 columns">
+                <label class="right inline">Search</label>
+            </div>
+            <div class="small-9 columns">
+                <input id="search" type="text" ng-model="query" placeholder=""/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-3 columns">
+                <label class="right inline">Sort by</label>
+            </div>
+            <div class="small-9 columns">
+                <select ng-model="orderProp">
+                    <option value="title">title</option>
+                    <option value="url">url</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="small-12 columns">
+                <div class="small-2 columns"></div>
+                <div class="small-4 columns">
+                    <a class="button postfix" ng-click="showLayer()">Add New Bookmark</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="line"></div>
+
+<a href="#/bookmarks/{{bookmark.id}}" class="quote" ng-repeat="bookmark in bookmarks | filter:query | orderBy:orderProp">
+    <p class="bookmark-in-bookmark">{{bookmark.url}}</p>
+    <p class="title-in-bookmark">
+        {{bookmark.title}}
+    </p>
+</a>
+
+<div class="new-quote-form ng-hide">
+    <h3>New Bookmark</h3>
+    <form>
+        <div class="row">
+            <div class="large-12 columns">
+                <label for="body">Url
+                    <br>
+                    <input ng-model="newItem.url" rows="4" cols="70" placeholder="www.google.com"></input>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                <br>
+                <label>Title</label>
+                <input ng-model="newItem.title" type="text" placeholder="google"/>
+                <label>Tags</label>
+                <input ng-model="newItem.tagList" type="text" placeholder="search"/>
+            </div>
+        </div>
+        <p></p>
+        <div class="small-4 columns">
+            <a class="button postfix" href="#" ng-click="hideForm()">Cancel</a>
+        </div>
+        <div class="small-4 columns">
+            <a class="button postfix" ng-click="submit(newItem); hideForm()">Add Bookmark</a>
+        </div>
+
+    </form>
+</div>
