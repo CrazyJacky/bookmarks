@@ -1,9 +1,17 @@
 source 'http://rubygems.org'
 
-gem 'pg'
+
 gem 'data_mapper'
-gem 'dm-postgres-adapter'
 gem 'sinatra'
 gem 'thin'
 gem 'tux'
 
+group :production do
+  gem 'dm-postgres-adapter'
+  gem 'pg'
+end
+
+group :development, :test do
+  gem 'sqlite3'
+  gem 'dm-sqlite-adapter'
+end

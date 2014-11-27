@@ -1,10 +1,11 @@
 require 'sinatra'
 require 'json'
+require 'digest/md5'
 
 
 class Server < Sinatra::Base
 
-
+  use Rack::Session::Pool, :expire_after  => 120
 
   require_relative 'model/init'
 
@@ -14,7 +15,12 @@ class Server < Sinatra::Base
             'Access-Control-Allow-Headers' => 'Content-Type'
   end
 
-  enable :sessions
+  configure do
+    enable :sessions
+    set :usernameMD5, '9661fd65249b026ebea0f49927e82f0e'
+    set :passwordMD5, 'b9556622dad3756764860385651e95ae'
+  end
+
 
   helpers do
     def add_tags(bookmark,data)
@@ -129,7 +135,7 @@ class Server < Sinatra::Base
     data = JSON.parse(request.body.read)
     user = data.slice "userName", "password"
 
-    if user["userName"].eql?("jacky") && user["password"].eql?("lovejulia")
+    if Digest::MD5.hexdigest(user["userName"]).eql?(settings.usernameMD5) && Digest::MD5.hexdigest(user["password"]).eql?(settings.passwordMD5)
       token = SecureRandom.urlsafe_base64
       ret = {"access_token" => token, "userName" => user["userName"]}
 
