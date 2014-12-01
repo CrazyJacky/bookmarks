@@ -11,7 +11,7 @@ bookmarkServices.factory("AuthService", ["$http","$q","$window",function ($http,
     function login(userName, password) {
         var deferred = $q.defer();
 
-        $http.post("/login", { userName: userName, password: password })
+        $http.post("/api/login", { userName: userName, password: password })
             .then(function (result) {
                 userInfo = {
                     accessToken: result.data.access_token,
@@ -33,13 +33,14 @@ bookmarkServices.factory("AuthService", ["$http","$q","$window",function ($http,
 
         $http({
             method: "POST",
-            url: "/logout",
+            url: "/api/logout",
             headers: {
                 "access_token": userInfo.access_token
             }
         }).then(function (result) {
             userInfo = null;
             $window.sessionStorage["userInfo"] = null;
+
             deferred.resolve(result);
         }, function (error) {
             deferred.reject(error);

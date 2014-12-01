@@ -1,9 +1,11 @@
 require 'data_mapper'
 require "dm-serializer"
 
+require_relative 'users'
 require_relative 'bookmarks'
 require_relative 'tags'
 require_relative 'taggings'
+
 
 
 

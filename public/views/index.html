@@ -38,7 +38,8 @@
         <ul class="left">
             <li class="active"><a href="/#/bookmarks">Bookmarks</a></li>
         </ul>
-        <ul class="right">
+        <ul class="right" ng-hide="!currentUserSignedIn">
+            <li class="active top-bar"><font color="#f8f8ff">Welcome,&nbsp; {{currentUser.userName}}&nbsp;&nbsp;  </font></li>
             <li class="active"><a ng-controller="HomeCtrl" ng-click="logout()">Logout</a></li>
         </ul>
     </section>

@@ -8,6 +8,8 @@ class Bookmark
   # Add tag support
   has n, :taggings, :constraint => :destroy
   has n, :tags, :through => :taggings, :order => [:label.asc]
+
+  belongs_to :user
   def tagList
     tags.collect do |tag|
       tag.label

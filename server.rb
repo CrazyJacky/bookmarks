@@ -5,7 +5,9 @@ require 'digest/md5'
 
 class Server < Sinatra::Base
 
-  use Rack::Session::Pool, :expire_after  => 120
+
+
+  #use Rack::Session::Pool, :expire_after  => 120
 
   require_relative 'model/init'
 
@@ -15,11 +17,13 @@ class Server < Sinatra::Base
             'Access-Control-Allow-Headers' => 'Content-Type'
   end
 
+begin
   configure do
     enable :sessions
-    set :usernameMD5, '9661fd65249b026ebea0f49927e82f0e'
-    set :passwordMD5, 'b9556622dad3756764860385651e95ae'
+    # set :usernameMD5, '9661fd65249b026ebea0f49927e82f0e'
+    # set :passwordMD5, 'b9556622dad3756764860385651e95ae'
   end
+end
 
 
   helpers do
@@ -62,6 +66,7 @@ class Server < Sinatra::Base
 
   get '/' do
     #authorize!
+    @users = User.all
     @bookmarks = Bookmark.all
     @tags = Tag.all
     @taggings = Tagging.all
@@ -73,17 +78,23 @@ class Server < Sinatra::Base
   with_tagList = {:methods => [:tagList]}
 
 
-  get '/bookmarks' do
-    @bookmarks = Bookmark.all
+  get '/api/bookmarks' do
+    @user = User.first(username: session[:username])
+
+    puts session[:username]
+
+    puts "user: " + @user.to_s
+
+    @bookmarks = @user.bookmarks.all
     @bookmarks.to_json with_tagList
   end
 
-  get '/bookmarks/:id' do
+  get '/api/bookmarks/:id' do
     @bookmark = Bookmark.get(params[:id])
     @bookmark.to_json with_tagList
   end
 
-  put '/bookmarks/edit/:id' do
+  put '/api/bookmarks/edit/:id' do
     # ...
     data = JSON.parse(request.body.read)
     input = data.slice "url", "title"
@@ -99,7 +110,7 @@ class Server < Sinatra::Base
     end
   end
 
-  delete '/bookmarks/:id' do
+  delete '/api/bookmarks/:id' do
     # ...
     @bookmark = Bookmark.get(params[:id])
     if @bookmark.destroy
@@ -110,14 +121,16 @@ class Server < Sinatra::Base
   end
 
 
-  post "/bookmarks" do
+  post "/api/bookmarks" do
+    @user = User.first(username: session[:username])
     data = JSON.parse(request.body.read)
     input = data.slice "url", "title"
     if !input["url"].match(/^http/)
       input["url"] = "http://" + input["url"]
     end
 
-    bookmark = Bookmark.new input
+    bookmark = Bookmark.new  :user => @user
+    bookmark.attributes = {:url => input["url"], :title => input["title"]}
 
     if  bookmark.save!
       # bookmark.save
@@ -131,11 +144,18 @@ class Server < Sinatra::Base
   end
 
 
-  post '/login' do
+  post '/api/login' do
     data = JSON.parse(request.body.read)
     user = data.slice "userName", "password"
 
-    if Digest::MD5.hexdigest(user["userName"]).eql?(settings.usernameMD5) && Digest::MD5.hexdigest(user["password"]).eql?(settings.passwordMD5)
+    @user = User.first(username: user["userName"])
+
+    if @user.nil?
+      [401,"The username you entered does not exist!"]
+    elsif @user.authenticate(user["password"])
+
+      session[:username] = user["userName"]
+      puts session[:username]
       token = SecureRandom.urlsafe_base64
       ret = {"access_token" => token, "userName" => user["userName"]}
 
@@ -146,40 +166,11 @@ class Server < Sinatra::Base
 
   end
 
-  post '/logout' do
+  post '/api/logout' do
     ret = {"access_token" => "", "userName" => ""}
     [200, ret.to_json]
   end
 
-=begin
-  app.post('/api/logout', requiresAuthentication, function(request, response) {
-                          var token= request.headers.access_token;
-                          removeFromTokens(token);
-                          response.send(200);
-                        });
-=end
-
-
-=begin
-  post('/api/login', function(request, response) {
-                     var userName = request.body.userName;
-                     var password = request.body.password;
-
-                     if (userName === "Ravi" && password === "kiran") {
-                         var expires = new Date();
-                     expires.setDate((new Date()).getDate() + 5);
-                     var token = jwt.encode({
-                                                userName: userName,
-                                                expires: expires
-                                            }, app.get('jwtTokenSecret'));
-
-                     tokens.push(token);
-
-                     response.send(200, { access_token: token, userName: userName });
-                     } else {
-                         response.send(401, "Invalid credentials");
-                     }
-=end
 
 
 

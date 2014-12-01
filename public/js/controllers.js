@@ -6,7 +6,7 @@ bookmarkControllers.controller('ShowAllCtrl', [
     '$scope', '$http',
     function ($scope, $http) {
 
-        $http.get("/bookmarks").success(function (response) {
+        $http.get("/api/bookmarks").success(function (response) {
             $scope.bookmarks = response;
         });
 
@@ -21,8 +21,8 @@ bookmarkControllers.controller('ShowAllCtrl', [
         }
 
         $scope.submit = function(newItem) {
-            $http.post("/bookmarks", newItem).success(function (newItem, status) {
-                $http.get("/bookmarks").success(function(response) {
+            $http.post("/api/bookmarks", newItem).success(function (newItem, status) {
+                $http.get("/api/bookmarks").success(function(response) {
                     $scope.bookmarks = response;
                 });
             });
@@ -33,11 +33,11 @@ bookmarkControllers.controller('ShowAllCtrl', [
 bookmarkControllers.controller('ShowBookmarkCtrl', [
     '$scope', '$routeParams', '$http', '$location',
     function($scope, $routeParams, $http, $location) {
-        $http.get("/bookmarks/" + $routeParams.id).success(function(response) {
+        $http.get("/api/bookmarks/" + $routeParams.id).success(function(response) {
             $scope.bookmark = response;
         }).error( function(response){
             alert("you can't go here!")
-            $location.path("/bookmarks");
+            $location.path("/api/bookmarks");
         });
 
         $scope.deleteForm = function() {
@@ -54,8 +54,8 @@ bookmarkControllers.controller('ShowBookmarkCtrl', [
         }
 
         $scope.sendDelete = function() {
-            $http.delete("/bookmarks/" + $routeParams.id).success(function(success) {
-                $location.path("/bookmarks");
+            $http.delete("/api/bookmarks/" + $routeParams.id).success(function(success) {
+                $location.path("/api/bookmarks");
             })
         }
 
@@ -64,14 +64,14 @@ bookmarkControllers.controller('ShowBookmarkCtrl', [
 bookmarkControllers.controller('EditBookmarkCtrl', [
     '$scope', '$routeParams', '$http', '$location',
     function($scope, $routeParams, $http, $location) {
-        $http.get("/bookmarks/" + $routeParams.id).success(function(response) {
+        $http.get("/api/bookmarks/" + $routeParams.id).success(function(response) {
             $scope.bookmark = response;
             $scope.bookmark.tagList = response.tagList.toString();
         });
 
         $scope.updateQuote = function(item) {
-            $http.put("/bookmarks/edit/" + $routeParams.id, item).success(function() {
-                $location.path("/bookmarks/" + $routeParams.id);
+            $http.put("/api/bookmarks/edit/" + $routeParams.id, item).success(function() {
+                $location.path("/api/bookmarks/" + $routeParams.id);
             });
         }
 

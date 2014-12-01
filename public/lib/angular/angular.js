@@ -12962,7 +12962,7 @@ function $SceDelegateProvider() {
 <file name="index.html">
   <div ng-controller="myAppController as myCtrl">
     <i ng-bind-html="myCtrl.explicitlyTrustedHtml" id="explicitlyTrustedHtml"></i><br><br>
-    <b>User comments</b><br>
+    <b>Users comments</b><br>
     By default, HTML that isn't explicitly trusted (e.g. Alice's comment) is sanitized when
     $sanitize is available.  If $sanitize isn't available, this results in an error instead of an
     exploit.
@@ -16387,7 +16387,7 @@ function checkboxInputType(scope, element, attr, ctrl) {
        </script>
        <div ng-controller="Ctrl">
          <form name="myForm">
-           User name: <input type="text" name="userName" ng-model="user.name" required>
+           Users name: <input type="text" name="userName" ng-model="user.name" required>
            <span class="error" ng-show="myForm.userName.$error.required">
              Required!</span><br>
            Last name: <input type="text" name="lastName" ng-model="user.last"
