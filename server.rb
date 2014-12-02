@@ -171,6 +171,28 @@ end
     [200, ret.to_json]
   end
 
+  post '/api/signup' do
+    data = JSON.parse(request.body.read)
+    user = data.slice "userName", "password"
+
+    @user = User.first(username: user["userName"])
+
+    if @user.nil?
+      @user = User.create(username: user["userName"])
+      @user.password = user["password"]
+      @user.save
+      session[:username] = user["userName"]
+      #puts session[:username]
+      token = SecureRandom.urlsafe_base64
+      ret = {"access_token" => token, "userName" => user["userName"]}
+
+      [201, ret.to_json]
+    else
+      ret = {"error_msg" => "Username already exists"}
+      [400, ret.to_json]
+    end
+  end
+
 
 
 
