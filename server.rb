@@ -81,9 +81,9 @@ end
   get '/api/bookmarks' do
     @user = User.first(username: session[:username])
 
-    puts session[:username]
+    #puts session[:username]
 
-    puts "user: " + @user.to_s
+    #puts "user: " + @user.to_s
 
     @bookmarks = @user.bookmarks.all
     @bookmarks.to_json with_tagList
@@ -155,7 +155,7 @@ end
     elsif @user.authenticate(user["password"])
 
       session[:username] = user["userName"]
-      puts session[:username]
+      #puts session[:username]
       token = SecureRandom.urlsafe_base64
       ret = {"access_token" => token, "userName" => user["userName"]}
 

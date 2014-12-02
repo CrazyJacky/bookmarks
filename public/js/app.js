@@ -85,29 +85,29 @@ bookmarkApp.config(['$routeProvider',
 bookmarkApp.run(["$rootScope", "$location", "AuthService", function ($rootScope, $location, AuthService) {
 
     $rootScope.$on("$routeChangeSuccess", function (userInfo) {
-        console.log(userInfo);
+        //console.log(userInfo);
         $rootScope.currentUserSignedIn = false;
-        console.log($rootScope.currentUserSignedIn)
+        //console.log($rootScope.currentUserSignedIn)
 
         var user = AuthService.getUserInfo();
-        console.log(user);
+        //console.log(user);
         if ( angular.isUndefined(user) || user === null ) {
             $rootScope.currentUserSignedIn = false;
             $rootScope.currentUser = null;
         } else {
             $rootScope.currentUserSignedIn = true;
             $rootScope.currentUser = user;
-            console.log($rootScope.currentUser);
+            //console.log($rootScope.currentUser);
         }
 
-        console.log($rootScope.currentUserSignedIn);
+        //console.log($rootScope.currentUserSignedIn);
     });
 
     $rootScope.$on("$routeChangeError", function (event, current, previous, eventObj) {
         if (eventObj.authenticated === false) {
             $rootScope.currentUserSignedIn = false;
             $location.path("/login");
-            console.log($rootScope.currentUserSignedIn)
+            //console.log($rootScope.currentUserSignedIn)
         }
     });
 }]);
