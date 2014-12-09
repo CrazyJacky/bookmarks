@@ -13,7 +13,7 @@ c_dir = File.dirname(__FILE__)
 db_dir = c_dir + "/../db"
 
 configure :development do
-  DataMapper::setup(:default, "sqlite3://#{db_dir}/bookmarksh.db")
+  DataMapper::setup(:default, "sqlite3://#{db_dir}/bookmarks.db")
 end
 
 configure :production do

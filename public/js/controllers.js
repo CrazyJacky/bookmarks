@@ -110,3 +110,21 @@ bookmarkControllers.controller("HomeCtrl", ["$scope", "$location", "AuthService"
             });
     };
 }]);
+
+bookmarkControllers.controller("SignupCtrl",["$scope", "$location", "$window", "AuthService",function ($scope, $location, $window, AuthService) {
+    $scope.userInfo = null;
+    $scope.signup = function() {
+
+            AuthService.signup($scope.userName, $scope.password)
+                .then(function (result) {
+                    $scope.userInfo = result;
+                    $location.path("/");
+                }, function (error) {
+                    $window.alert("Sign Up failed");
+                    console.log(error);
+                });
+
+    };
+}]);
+
+

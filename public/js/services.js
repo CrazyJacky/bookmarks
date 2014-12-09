@@ -28,6 +28,26 @@ bookmarkServices.factory("AuthService", ["$http","$q","$window",function ($http,
         return deferred.promise;
     }
 
+    function signup(userName, password) {
+        var deferred = $q.defer();
+
+        $http.post("/api/signup", { userName: userName, password: password })
+            .then(function (result) {
+                userInfo = {
+                    accessToken: result.data.access_token,
+                    userName: result.data.userName
+                };
+                $window.sessionStorage["userInfo"] = JSON.stringify(result.data);
+                deferred.resolve(userInfo);
+                console.log($window.sessionStorage["userInfo"]);
+                console.log(result);
+            }, function (error) {
+                deferred.reject(error);
+            });
+
+        return deferred.promise;
+    }
+
     function logout() {
         var deferred = $q.defer();
 
@@ -63,6 +83,7 @@ bookmarkServices.factory("AuthService", ["$http","$q","$window",function ($http,
     return {
         login: login,
         logout: logout,
-        getUserInfo: getUserInfo
+        getUserInfo: getUserInfo,
+        signup: signup
     };
 }]);

@@ -3,12 +3,17 @@
 var bookmarkApp = angular.module('bookmarkApp', [
     'ngRoute',
     'bookmarkControllers',
-    'bookmarkServices'
+    'bookmarkServices',
+    'validation.match'
 ]);
 
 bookmarkApp.config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.
+            when("/signup", {
+                templateUrl: "views/partials/signup.html",
+                controller: "SignupCtrl"
+            }).
             when("/login", {
                 templateUrl: "views/partials/login.html",
                 controller: "LoginCtrl"
