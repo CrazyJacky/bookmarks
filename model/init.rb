@@ -16,8 +16,6 @@ configure :development do
   DataMapper::setup(:default, "sqlite3://#{db_dir}/bookmarks.db")
 end
 
-configure :production do
-  DataMapper::setup(:default, "postgres://trfoajmntjazdy:ufLWnpJfMlDygGunJ5YdlpVJwA@ec2-54-243-51-102.compute-1.amazonaws.com:5432/dbibra39e733iq")
-end
+
 
 DataMapper.finalize.auto_upgrade!
