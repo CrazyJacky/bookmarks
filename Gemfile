@@ -9,7 +9,6 @@ gem 'warden'
 gem 'bcrypt'
 gem 'rack'
 gem 'ripl-multi_line'
-gem 'rake'
 
 group :production do
   gem 'dm-postgres-adapter'
@@ -19,4 +18,5 @@ end
 group :development, :test do
   gem 'sqlite3'
   gem 'dm-sqlite-adapter'
+  gem 'rake'
 end
