@@ -9,6 +9,7 @@ gem 'warden'
 gem 'bcrypt'
 gem 'rack'
 gem 'ripl-multi_line'
+gem 'rake'
 
 group :production do
   gem 'dm-postgres-adapter'
